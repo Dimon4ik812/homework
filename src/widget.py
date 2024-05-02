@@ -7,9 +7,16 @@ def data_masking_function(user_data: str) -> str:
         result = account_disguise(int(user_data))
         return result
     else:
-        card_type, card_number = user_data.split(maxsplit=1)
+        card_type = ''
+        card_number = ''
+        for i in user_data:
+            if i.isdigit():
+                card_number += i
+            else:
+                card_type += i
+
         filter_card_number = masking_card_number(card_number)
-        return card_type + ' ' + filter_card_number
+        return card_type + filter_card_number
 
 
 def date_decoding(encrypted_date: str) -> str:
