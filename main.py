@@ -1,5 +1,5 @@
-from src.masks import account_disguise, masking_card_number
+from src.widget import data_masking_function, date_decoding
 
-print(masking_card_number(7000792289606361))
+print(data_masking_function('Счет 64686473678894779589'))
 
-print(account_disguise(73654108430135874305))
+print(date_decoding('2018-07-11T02:26:18.671407'))
