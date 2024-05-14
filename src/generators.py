@@ -81,11 +81,14 @@ transactions = (
 def filter_by_currency(transactions, currency):
     """Функция принимает список словарей и фильтрует его по валюте"""
     for transaction in transactions:
-        if transaction["operationAmount"]["currency"]["code"] == currency:
+        if transaction['operationAmount']['currency']['code'] == currency:
             yield transaction
 
 
-usd_transactions = filter_by_currency(transactions, "RUB")
 
-for _ in range(2):
-    print(next(usd_transactions)["id"])
+def transaction_descriptions(transactions):
+    """Функция возвращает описание каждой операции по очереди"""
+    for transaction in transactions:
+        yield transaction['description']
+
+
