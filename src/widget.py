@@ -19,7 +19,9 @@ def data_masking_function(user_data: str) -> str:
         return card_type + filter_card_number
 
 
+
 def date_decoding(encrypted_date: str) -> str:
     """функция принимает дату и переворачивает ее"""
     data_parts = encrypted_date.split('T')[0].split('-')
     return '.'.join(data_parts[::-1])
+
