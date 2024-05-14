@@ -1,5 +1,7 @@
 import pytest
 
+from main import transactions
+from src.generators import card_number_generator, transaction_descriptions
 from src.processing import filtering_words_by_key, sort_descending
 from src.widget import data_masking_function, date_decoding
 
@@ -83,3 +85,21 @@ def test_data_masking_function(value, expected):
 
 def test_date_decoding(decoding):
     assert date_decoding("2018-07-11T02:26:18.671407") == decoding
+
+
+def test_card_number_generator():
+    generator = card_number_generator(1, 5)
+    assert next(generator) == "0000 0000 0000 0001"
+    assert next(generator) == "0000 0000 0000 0002"
+    assert next(generator) == "0000 0000 0000 0003"
+    assert next(generator) == "0000 0000 0000 0004"
+    assert next(generator) == "0000 0000 0000 0005"
+
+
+def test_transaction_descriptions():
+    generator = transaction_descriptions(transactions)
+    assert next(generator) == "Перевод организации"
+    assert next(generator) == "Перевод со счета на счет"
+    assert next(generator) == "Перевод со счета на счет"
+    assert next(generator) == "Перевод с карты на карту"
+    assert next(generator) == "Перевод организации"

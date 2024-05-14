@@ -70,7 +70,7 @@ for i in check_second_func:
 
 usd_transactions = filter_by_currency(transactions, "USD")
 
-for _ in range(2):
+for _ in range(3):
     print(next(usd_transactions)["id"])
 
 
