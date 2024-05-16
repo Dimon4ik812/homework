@@ -16,7 +16,7 @@ def masking_card_number(number: int) -> str:
     return filter_number
 
 
-def account_disguise(number: int) -> str:
+def account_disguise(number: str) -> str:
     """Функция принимает номер счета и возвращает его маску"""
     string_number = str(number)
     masked_number = "**" + string_number[-4:]
