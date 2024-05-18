@@ -1,5 +1,7 @@
+from typing import Any
+from src.decorators import log
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import filtering_words_by_key, sort_descending
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 
 input_data = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -82,3 +84,39 @@ for _ in range(5):
 
 for card_number in card_number_generator(1, 5):
     print(card_number)
+
+
+@log(filename="mylog.txt")
+def my_function(x: int, y: int) -> int:
+    """функция вызова декоратора с запись в'mylog.txt'"""
+    return x + y
+
+
+my_function(1, 2)
+
+
+@log(filename="mylog.txt")
+def my_function_error(x: int, y: Any) -> None:
+    """функция вызова декоратора с ошибок и записью в 'mylog.txt'"""
+    return x + y
+
+
+my_function_error(1, "2")
+
+
+@log()
+def my_function_not_file(x: int, y: int) -> int:
+    """функция вызова декоратора с выводом результата в консоль"""
+    return x + y
+
+
+my_function_not_file(1, 2)
+
+
+@log()
+def my_function_not_file_error(x: int, y: Any) -> None:
+    """функция вызова декоратора с ошибкой и выводом в консоль"""
+    return x + y
+
+
+my_function_not_file_error(1, "2")
