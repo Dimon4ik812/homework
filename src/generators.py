@@ -1,4 +1,4 @@
-from typing import List, Generator
+from typing import Generator, List
 
 
 def filter_by_currency(transactions: List[dict], currency: str) -> Generator:
@@ -18,5 +18,5 @@ def card_number_generator(start: int, end: int) -> Generator[str, None, None]:
     """Функция генерирует номер банковской карты"""
     for num in range(start, end + 1):
         card_number = "{:016d}".format(num)
-        formatted_card_number = " ".join([card_number[i: i + 4] for i in range(0, len(card_number), 4)])
+        formatted_card_number = " ".join([card_number[i : i + 4] for i in range(0, len(card_number), 4)])
         yield formatted_card_number
