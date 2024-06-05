@@ -1,25 +1,28 @@
 import json
 import os
 
-def load_transaction(file_path):
-    """загружаем данные о финансовых транзакциях из JSON-файла"""
+
+def get_transactions(file_path: str) -> list[dict]:
+    """
+    Функция, которая принимает путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях.
+    Если файл пустой, содержит не список или не найден, функция возвращает пустой список.
+    """
     try:
-        if not os.path.exists(file_path):
-            return []
-
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-
-        if not isinstance(data, list):
-            return []
-
-        return data
-    except (json.JSONDecodeError, IOError):
+        with open(file_path, "r", encoding="utf-8") as file:
+            repos = json.load(file)
+            if isinstance(repos, list):
+                return repos
+            else:
+                return []
+    except (FileNotFoundError, json.JSONDecodeError):
         return []
 
 
-if __name__ == '__main__':
-    file_path = '../data/operations.json'
-    transactions = load_transaction(file_path)
-    for transaction in transactions:
-        print(transaction)
+# file_path = '../data/operations.json'
+# transaction = load_transactions(file_path)
+
+# Путь до файла с данными о финансовых транзакциях
+current_dir = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(current_dir, "../data", "operations.json")
+transactions = get_transactions(json_file_path)
+print(transactions)
