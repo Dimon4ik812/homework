@@ -1,4 +1,5 @@
 from typing import Any
+from src.masks import masking_card_number, account_disguise
 from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import filtering_words_by_key, sort_descending
@@ -64,7 +65,14 @@ transactions = [
 ]
 
 
+mask_card_number = masking_card_number("7000792289606361")
+print(mask_card_number)
+
+mask_account = account_disguise("73654108430135874305")
+print(mask_account)
+
 check_first_func = filtering_words_by_key(input_data)
+
 for i in check_first_func:
     print(i)
 
