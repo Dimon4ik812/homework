@@ -2,6 +2,10 @@ from typing import Any
 from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.processing import filtering_words_by_key, sort_descending
+from src.external_api import convert_to_rub
+from src.utils import get_transactions
+import os
+
 
 input_data = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -120,3 +124,16 @@ def my_function_not_file_error(x: int, y: Any) -> None:
 
 
 my_function_not_file_error(1, "2")
+
+
+# Путь до файла с данными о финансовых транзакциях
+current_dir = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(current_dir, "data", "operations.json")
+transactions = get_transactions(json_file_path)
+print(transactions)
+
+
+for transaction in transactions:
+    rub_amount = convert_to_rub(transaction)
+
+    print(f"Transaction amount in RUB: {rub_amount}")
