@@ -5,6 +5,7 @@ from src.generators import card_number_generator, filter_by_currency, transactio
 from src.processing import filtering_words_by_key, sort_descending
 from src.external_api import convert_to_rub
 from src.utils import get_transactions
+from src.widget import date_decoding
 import os
 
 
@@ -64,84 +65,97 @@ transactions = [
     },
 ]
 
-
-mask_card_number = masking_card_number("7000792289606361")
-print(mask_card_number)
-
-mask_account = account_disguise("73654108430135874305")
-print(mask_account)
-
-check_first_func = filtering_words_by_key(input_data)
-
-for i in check_first_func:
-    print(i)
-
-
-check_second_func = sort_descending(input_data)
-for i in check_second_func:
-    print(i)
-
-
-usd_transactions = filter_by_currency(transactions, "USD")
-
-for _ in range(3):
-    print(next(usd_transactions)["id"])
-
-
-descriptions = transaction_descriptions(transactions)
-
-for _ in range(5):
-    print(next(descriptions))
-
-
-for card_number in card_number_generator(1, 5):
-    print(card_number)
-
-
-@log(filename="mylog.txt")
-def my_function(x: int, y: int) -> int:
-    """функция вызова декоратора с запись в'mylog.txt'"""
-    return x + y
-
-
-my_function(1, 2)
-
-
-@log(filename="mylog.txt")
-def my_function_error(x: int, y: Any) -> None:
-    """функция вызова декоратора с ошибок и записью в 'mylog.txt'"""
-    return x + y
-
-
-my_function_error(1, "2")
-
-
-@log()
-def my_function_not_file(x: int, y: int) -> int:
-    """функция вызова декоратора с выводом результата в консоль"""
-    return x + y
-
-
-my_function_not_file(1, 2)
-
-
-@log()
-def my_function_not_file_error(x: int, y: Any) -> None:
-    """функция вызова декоратора с ошибкой и выводом в консоль"""
-    return x + y
-
-
-my_function_not_file_error(1, "2")
-
-
-# Путь до файла с данными о финансовых транзакциях
+# output_data = date_decoding('2018-07-11T02:26:18.671407')
+# print(output_data)
+#
+# mask_card_number = masking_card_number("7000792289606361")
+# print(mask_card_number)
+#
+# mask_account = account_disguise("73654108430135874305")
+# print(mask_account)
+#
+# check_first_func = filtering_words_by_key(input_data)
+#
+# for i in check_first_func:
+#     print(i)
+#
+#
+# check_second_func = sort_descending(input_data)
+# for i in check_second_func:
+#     print(i)
+#
+#
+# usd_transactions = filter_by_currency(transactions, "USD")
+#
+# for _ in range(3):
+#     print(next(usd_transactions)["id"])
+#
+#
+# descriptions = transaction_descriptions(transactions)
+#
+# for _ in range(5):
+#     print(next(descriptions))
+#
+#
+# for card_number in card_number_generator(1, 5):
+#     print(card_number)
+#
+#
+# @log(filename="mylog.txt")
+# def my_function(x: int, y: int) -> int:
+#     """функция вызова декоратора с запись в'mylog.txt'"""
+#     return x + y
+#
+#
+# my_function(1, 2)
+#
+#
+# @log(filename="mylog.txt")
+# def my_function_error(x: int, y: Any) -> None:
+#     """функция вызова декоратора с ошибок и записью в 'mylog.txt'"""
+#     return x + y
+#
+#
+# my_function_error(1, "2")
+#
+#
+# @log()
+# def my_function_not_file(x: int, y: int) -> int:
+#     """функция вызова декоратора с выводом результата в консоль"""
+#     return x + y
+#
+#
+# my_function_not_file(1, 2)
+#
+#
+# @log()
+# def my_function_not_file_error(x: int, y: Any) -> None:
+#     """функция вызова декоратора с ошибкой и выводом в консоль"""
+#     return x + y
+#
+#
+# my_function_not_file_error(1, "2")
+#
+#
+# # Путь до файла с данными о финансовых транзакциях
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# json_file_path = os.path.join(current_dir, "data", "operations.json")
+# transactions = get_transactions(json_file_path)
+# print(transactions)
+#
+#
+# for transaction in transactions:
+#     rub_amount = convert_to_rub(transaction)
+#
+#     print(f"Transaction amount in RUB: {rub_amount}")
 current_dir = os.path.dirname(os.path.abspath(__file__))
-json_file_path = os.path.join(current_dir, "data", "operations.json")
-transactions = get_transactions(json_file_path)
+csv_file_path = os.path.join(current_dir, "data", "transactions.csv")
+transactions = get_transactions(csv_file_path)
 print(transactions)
 
+print('############')
 
-for transaction in transactions:
-    rub_amount = convert_to_rub(transaction)
-
-    print(f"Transaction amount in RUB: {rub_amount}")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+excel_file_path = os.path.join(current_dir, "data", "transactions_excel.xlsx")
+transactions = get_transactions(excel_file_path)
+print(transactions)
