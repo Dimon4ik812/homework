@@ -22,8 +22,8 @@ def data_masking_function(user_data: str) -> str:
 
 def date_decoding(encrypted_date: str) -> str:
     """функция принимает дату и переворачивает ее"""
-    date_time_obj = datetime.strptime(encrypted_date, '%Y-%m-%dT%H:%M:%S.%f')
-    formatted_date = date_time_obj.strftime('%d.%m.%Y')
+    date_time_obj = datetime.strptime(encrypted_date, "%Y-%m-%dT%H:%M:%S.%f")
+    formatted_date = date_time_obj.strftime("%d.%m.%Y")
     return formatted_date
     # data_parts = encrypted_date.split("T")[0].split("-")
     # return ".".join(data_parts[::-1])
