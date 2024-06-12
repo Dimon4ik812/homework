@@ -1,15 +1,11 @@
-import json
-import logging
-import pandas as pd
 import csv
+import json
 
+import pandas as pd
 
-logger = logging.getLogger("utils")
-logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler("logs/utils.log")
-file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
+from src.logger import setup_logging
+
+logger = setup_logging("utils", "logs/utils.log")
 
 
 def get_transactions(file_path: str) -> list[dict]:
@@ -19,7 +15,7 @@ def get_transactions(file_path: str) -> list[dict]:
     """
     try:
         if file_path.endswith(".json"):
-            logger.info(f"открываем json файл *")
+            logger.info("открываем json файл *")
             with open(file_path, "r", encoding="utf-8") as file:
                 repos = json.load(file)
                 logger.info("Проверка содержимого в файле")
@@ -28,16 +24,16 @@ def get_transactions(file_path: str) -> list[dict]:
                 else:
                     return []
         elif file_path.endswith(".csv"):
-            logger.info(f"открываем csv файл *")
+            logger.info("открываем csv файл *")
             with open(file_path, "r", encoding="utf-8") as file:
-                reader = csv.DictReader(file)
+                reader = csv.DictReader(file, delimiter=";")
                 return list(reader)
         elif file_path.endswith(".xlsx"):
-            logger.info(f"открываем excel файл *")
+            logger.info("открываем excel файл *")
             df = pd.read_excel(file_path)
             return df.to_dict(orient="records")
         else:
-            logger.error(f"Неподреживаемый формат файла: {file_path}")
+            logger.error("Неподреживаемый формат файла *")
             return []
     except (FileNotFoundError, json.JSONDecodeError, pd.errors.EmptyDataError) as e:
         logger.error(f"Произошла ошибка {e}")

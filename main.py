@@ -1,13 +1,13 @@
+import os
 from typing import Any
-from src.masks import masking_card_number, account_disguise
+
 from src.decorators import log
-from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
-from src.processing import filtering_words_by_key, sort_descending
 from src.external_api import convert_to_rub
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
+from src.masks import account_disguise, masking_card_number
+from src.processing import filtering_words_by_key, sort_descending
 from src.utils import get_transactions
 from src.widget import date_decoding
-import os
-
 
 input_data = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -153,9 +153,59 @@ csv_file_path = os.path.join(current_dir, "data", "transactions.csv")
 transactions = get_transactions(csv_file_path)
 print(transactions)
 
-print("############")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-excel_file_path = os.path.join(current_dir, "data", "transactions_excel.xlsx")
-transactions = get_transactions(excel_file_path)
-print(transactions)
+json_file_path = os.path.join(current_dir, "data", "transactions.csv")
+transactions = get_transactions(json_file_path)
+
+transaction = []
+for transaction1 in transactions:
+
+    if transaction1["id"] != "" or transaction1["id"] != float:
+        result = {
+            "id": transaction1["id"],
+            "state": transaction1["state"],
+            "date": transaction1["date"],
+            "operationAmount": {
+                "amount": transaction1["amount"],
+                "currency": {"name": transaction1["currency_name"], "code": transaction1["currency_code"]},
+            },
+            "description": transaction1["description"],
+            "from": transaction1["from"],
+            "to": transaction1["to"],
+        }
+    else:
+        result = {}
+    transaction.append(result)
+    print(transaction)
+
+for transact in transaction:
+
+    rub_amount = convert_to_rub(transact)
+
+    print(f"Transaction amount in RUB: {rub_amount}")
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+json_file_path = os.path.join(current_dir, "data", "transactions_excel.xlsx")
+transactions = get_transactions(json_file_path)
+
+transaction = []
+for transaction1 in transactions:
+
+    if transaction1["id"] != "" or transaction1["id"] != float:
+        result = {
+            "id": transaction1["id"],
+            "state": transaction1["state"],
+            "date": transaction1["date"],
+            "operationAmount": {
+                "amount": transaction1["amount"],
+                "currency": {"name": transaction1["currency_name"], "code": transaction1["currency_code"]},
+            },
+            "description": transaction1["description"],
+            "from": transaction1["from"],
+            "to": transaction1["to"],
+        }
+    else:
+        result = {}
+    transaction.append(result)
+    print(transaction)
