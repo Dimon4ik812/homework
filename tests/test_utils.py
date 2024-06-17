@@ -1,7 +1,14 @@
+import json
 import unittest
 from unittest.mock import mock_open, patch
-import json
+
+import pandas as pd
+
+from src.logger import setup_logging
 from src.utils import get_transactions
+
+logger_1 = setup_logging("masks", "logs/masks.log")
+logger = setup_logging("utils", "logs/utils.log")
 
 
 class TestGetTransactions(unittest.TestCase):
@@ -13,13 +20,13 @@ class TestGetTransactions(unittest.TestCase):
         self.assertEqual(result, expected_data)
         mock_file.assert_called_once_with("fake_path.json", "r", encoding="utf-8")
 
-    @patch("builtins.open", new_callable=mock_open, read_data='{}')
+    @patch("builtins.open", new_callable=mock_open, read_data="{}")
     def test_get_transactions_invalid_content(self, mock_file):
         result = get_transactions("fake_path.json")
         self.assertEqual(result, [])
         mock_file.assert_called_once_with("fake_path.json", "r", encoding="utf-8")
 
-    @patch("builtins.open", new_callable=mock_open, read_data='')
+    @patch("builtins.open", new_callable=mock_open, read_data="")
     def test_get_transactions_empty_file(self, mock_file):
         result = get_transactions("fake_path.json")
         self.assertEqual(result, [])
@@ -39,5 +46,19 @@ class TestGetTransactions(unittest.TestCase):
         mock_file.assert_called_once_with("fake_path.json", "r", encoding="utf-8")
         mock_json_load.assert_called_once()
 
-if __name__ == "__main__":
-    unittest.main()
+    @patch("builtins.open", mock_open(read_data="id,amount\n1,100\n2,200"))
+    @patch("csv.DictReader")
+    @patch("src.utils.logger")
+    def test_get_transactions_csv(self, mock_logger, mock_csv_reader):
+        mock_csv_reader.return_value = [{"id": "1", "amount": "100"}, {"id": "2", "amount": "200"}]
+        result = get_transactions("data/transactions.csv")
+        self.assertEqual(result, [{"id": "1", "amount": "100"}, {"id": "2", "amount": "200"}])
+        mock_logger.info.assert_called_with("открываем csv файл *")
+
+    @patch("pandas.read_excel")
+    @patch("src.utils.logger")
+    def test_get_transactions_excel(self, mock_logger, mock_read_excel):
+        mock_read_excel.return_value = pd.DataFrame({"id": [1, 2], "amount": [100, 200]})
+        result = get_transactions("data/transactions.xlsx")
+        self.assertEqual(result, [{"id": 1, "amount": 100}, {"id": 2, "amount": 200}])
+        mock_logger.info.assert_called_with("открываем excel файл *")

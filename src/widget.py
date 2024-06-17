@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from src.masks import account_disguise, masking_card_number
 
 
@@ -15,11 +17,12 @@ def data_masking_function(user_data: str) -> str:
             else:
                 card_type += i
 
-        filter_card_number = masking_card_number(int(card_number))
+        filter_card_number = masking_card_number(str(card_number))
         return card_type + filter_card_number
 
 
 def date_decoding(encrypted_date: str) -> str:
     """функция принимает дату и переворачивает ее"""
-    data_parts = encrypted_date.split("T")[0].split("-")
-    return ".".join(data_parts[::-1])
+    date_time_obj = datetime.strptime(encrypted_date, "%Y-%m-%dT%H:%M:%S.%f")
+    formatted_date = date_time_obj.strftime("%d.%m.%Y")
+    return formatted_date
