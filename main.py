@@ -90,41 +90,38 @@ def main() -> Any:
                     print(
                         f"{date_decoding(operations['date'])} {operations['description']}\n"
                         f" {data_masking_function(operations['to'])}\n"
-                        f"{operations['operationAmount']['amount']} {operations['operationAmount']['currency']['name']}"
+                        f"{operations['operationAmount']['amount']} "
+                        f"{operations['operationAmount']['currency']['name']}"
                     )
                 else:
                     print(
                         f"{date_decoding(operations['date'])} {operations['description']}\n"
                         f"{data_masking_function(operations['from'])} -> {data_masking_function(operations['to'])}\n"
-                        f"{operations['operationAmount']['amount']} {operations['operationAmount']['currency']['name']}"
+                        f"{operations['operationAmount']['amount']} "
+                        f"{operations['operationAmount']['currency']['name']}"
                     )
             break
         elif input_filter_by_word == "да":
             search_key = input("Введите слова для фильтрации:")
-            if search_key not in [
-                "Перевод организации",
-                "Открытие вклада",
-                "Перевод со счета на счет",
-                "Перевод с карты на карту",
-            ]:
-                print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
-            else:
-                result = search_transactions(filter_currency, search_key)
-                print("Распечатываю итоговый список транзакций...")
-                print(f" Всего банковских операций в выборке: {len(result)}")
-                for operations in result:
-                    if operations["description"].lower() == "открытие вклада":
-                        print(
-                            f"{date_decoding(operations['date'])} {operations['description']}\n"
-                            f" {data_masking_function(operations['to'])}\n"
-                            f"{operations['operationAmount']['amount']} {operations['operationAmount']['currency']['name']}"
-                        )
-                    else:
-                        print(
-                            f"{date_decoding(operations['date'])} {operations['description']}\n"
-                            f"{data_masking_function(operations['from'])} -> {data_masking_function(operations['to'])}\n"
-                            f"{operations['operationAmount']['amount']} {operations['operationAmount']['currency']['name']}"
-                        )
+            result = search_transactions(filter_currency, search_key)
+            print("Распечатываю итоговый список транзакций...")
+            print(f" Всего банковских операций в выборке: {len(result)}")
+            for operations in result:
+                if operations["description"].lower() == "открытие вклада":
+                    print(
+                        f"{date_decoding(operations['date'])} {operations['description']}\n"
+                        f" {data_masking_function(operations['to'])}\n"
+                        f"{operations['operationAmount']['amount']} "
+                        f"{operations['operationAmount']['currency']['name']}"
+                    )
+                else:
+                    print(
+                        f"{date_decoding(operations['date'])} {operations['description']}\n"
+                        f"{data_masking_function(operations['from'])} -> "
+                        f"{data_masking_function(operations['to'])}\n"
+                        f"{operations['operationAmount']['amount']} "
+                        f"{operations['operationAmount']['currency']['name']}"
+                    )
             break
         else:
             print(f"{input_filter_by_word} не правильный ввод")
