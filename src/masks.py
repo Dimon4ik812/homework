@@ -26,7 +26,7 @@ def account_disguise(number: str) -> str:
     """Функция принимает номер счета и возвращает его маску"""
     logger.info("Маскируем номер счета в формате ** и 4 последнии цифры")
     string_number = str(number)
-    masked_number = "**" + string_number[-4:]
+    masked_number = string_number[0:4] + " **" + string_number[-4:]
     return masked_number
 
 
